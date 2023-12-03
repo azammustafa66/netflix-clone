@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { FirebaseError } from "firebase/app";
+import toast from "react-hot-toast";
 
 import Header from "../layout/Header";
-import { BG_URL } from "../../utils/constants";
+import { BG_URL, USER_AVATAR } from "../../utils/constants";
+import { auth, db } from "../../utils/firebase";
+
 
 const loginSchema = yup
   .object({
@@ -42,6 +52,57 @@ interface IFormInputs {
 
 const LogIn: React.FC = () => {
   const [toggleSignIn, setToggleSignIn] = useState<boolean>(true);
+  const navigate = useNavigate();
+
+  const handleSignUp = async (formInputs: IFormInputs) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formInputs.email,
+        formInputs.password
+      );
+      const user = userCredential.user;
+      // Store user data in database
+      await setDoc(doc(db, "users", user.uid), {
+        name: formInputs.name,
+        email: user.email,
+        photoURL: USER_AVATAR,
+      });
+      // Update user profile
+      await updateProfile(user, {
+        displayName: formInputs.name,
+        photoURL: USER_AVATAR,
+      });
+      // Navigate to browse page
+      toast.success("Account created successfully!");
+      navigate("/browse");
+    } catch (error) {
+      if ((error as FirebaseError).code === "auth/email-already-in-use") {
+        toast.error("This email is already in use.");
+      } else {
+        toast.error(`Error signing up. ${(error as FirebaseError).message}`);
+      }
+    }
+  };
+
+  const handleLogIn = async (formInputs: IFormInputs) => {
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        formInputs.email,
+        formInputs.password
+      );
+      toast.success("Signed in successfully!");
+      navigate("/browse");
+    } catch (error) {
+      if ((error as FirebaseError).code === "auth/user-not-found") {
+        toast.error("No user found with this email.");
+      } else {
+        toast.error(`Error signing in. ${(error as FirebaseError).message}`);
+      }
+    }
+  };
+
   const {
     register,
     handleSubmit,
@@ -51,18 +112,18 @@ const LogIn: React.FC = () => {
     resolver: yupResolver(toggleSignIn ? loginSchema : signUpSchema),
   });
 
-  const onSubmit = (data: IFormInputs) => {
-    console.log(data);
+  const onSubmit = async (formInputs: IFormInputs) => {
+    if (toggleSignIn) {
+      await handleLogIn(formInputs);
+    } else {
+      await handleSignUp(formInputs);
+    }
     reset();
-  };
-
-  const handleSubmitButton = () => {
-    console.log("clicked");
   };
 
   return (
     <>
-      <Header />
+      <Header isBrowsePage={false} />
       <article
         className="flex flex-col h-screen justify-center items-center bg-cover bg-center"
         style={{
@@ -113,7 +174,6 @@ const LogIn: React.FC = () => {
             <button
               type="submit"
               className="p-3 bg-red-600 rounded font-bold hover:bg-red-700 transition duration-200"
-              onClick={handleSubmitButton}
             >
               {toggleSignIn ? "Log In" : "Sign Up"}
             </button>
@@ -128,7 +188,10 @@ const LogIn: React.FC = () => {
             </Link>
           </div>
           <div className="mt-6 text-sm text-gray-300 cursor-pointer">
-            <span onClick={() => setToggleSignIn(!toggleSignIn)} className="hover:underline">
+            <span
+              onClick={() => setToggleSignIn(!toggleSignIn)}
+              className="hover:underline"
+            >
               {toggleSignIn
                 ? "New to Netflix? Sign up now."
                 : "Already have an account? Sign in."}
@@ -141,3 +204,14 @@ const LogIn: React.FC = () => {
 };
 
 export default LogIn;
+
+toast("Welcome to Netflix!", {
+  position: "top-center",
+  style: {
+    borderRadius: "4px",
+    background: "#181818",
+    color: "#fff",
+    border: "1px solid #E50914",
+    padding: "8px",
+  },
+});
