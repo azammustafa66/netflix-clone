@@ -1,6 +1,6 @@
 import { useAuthListener } from "../../utils/hooks/useAuthListener";
 
-const AuthListenerComponent = () => {
+const AuthListenerComponent = (): null => {
   useAuthListener();
   return null;
 };

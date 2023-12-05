@@ -1,4 +1,10 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist({
+  key: "recoil-auth-persist",
+  storage: sessionStorage,
+});
 
 interface Credentials {
   uid: string;
@@ -7,7 +13,7 @@ interface Credentials {
   photoURL: string | null;
 }
 
-export const authState = atom<{
+export const authAtom = atom<{
   userCredentials: Credentials | null;
   isLoggedIn: boolean;
 }>({
@@ -16,4 +22,5 @@ export const authState = atom<{
     userCredentials: null,
     isLoggedIn: false,
   },
+  effects_UNSTABLE: [persistAtom],
 });

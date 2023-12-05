@@ -16,7 +16,6 @@ import Header from "../layout/Header";
 import { BG_URL, USER_AVATAR } from "../../utils/constants";
 import { auth, db } from "../../utils/firebase";
 
-
 const loginSchema = yup
   .object({
     email: yup
@@ -204,14 +203,3 @@ const LogIn: React.FC = () => {
 };
 
 export default LogIn;
-
-toast("Welcome to Netflix!", {
-  position: "top-center",
-  style: {
-    borderRadius: "4px",
-    background: "#181818",
-    color: "#fff",
-    border: "1px solid #E50914",
-    padding: "8px",
-  },
-});

@@ -4,10 +4,13 @@ import { RecoilRoot } from "recoil";
 import { Suspense, lazy } from "react";
 
 import { ProtectedRoute } from "./utils/protected-routes/ProtectedRoute";
+import { PublicRoutes } from "./utils/public-routes/PublicRoutes";
 import AuthListenerComponent from "./components/auth/AuthListenerComponent";
+import Loader from "./components/loader-ui/Loader";
+import NotFoundPage from "./components/pages/NotFoundPage";
 
-const LogIn = lazy(() => import("./components/auth/LogIn"));
-const Browse = lazy(() => import("./components/layout/Browse"));
+const LogIn = lazy(() => import("./components/pages/LogIn"));
+const Browse = lazy(() => import("./components/pages/feed/Browse"));
 
 export default function App(): JSX.Element {
   return (
@@ -24,9 +27,24 @@ export default function App(): JSX.Element {
           }}
         />
         <AuthListenerComponent />
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loader />}>
           <Routes>
-            <Route path="/" element={<LogIn />} />
+            <Route
+              path="/"
+              element={
+                <PublicRoutes>
+                  <LogIn />
+                </PublicRoutes>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PublicRoutes>
+                  <LogIn />
+                </PublicRoutes>
+              }
+            />
             <Route
               path="/browse"
               element={
@@ -35,6 +53,7 @@ export default function App(): JSX.Element {
                 </ProtectedRoute>
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </RecoilRoot>

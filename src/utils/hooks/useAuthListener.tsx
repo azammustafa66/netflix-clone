@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { authState } from "../recoil-atoms/authState";
 
-export const useAuthListener = () => {
-  const setAuthState = useSetRecoilState(authState);
+import { authAtom } from "../recoil-atoms/authAtom";
+
+export const useAuthListener = (): void => {
+  const setAuthState = useSetRecoilState(authAtom);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // user is not null, so we can safely access uid, email
         const { uid, email, displayName, photoURL } = user;
@@ -20,5 +21,7 @@ export const useAuthListener = () => {
         setAuthState({ userCredentials: null, isLoggedIn: false });
       }
     });
-  }, [setAuthState]);
+
+    return () => unsubscribe();
+  }, []);
 };

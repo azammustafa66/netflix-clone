@@ -23,14 +23,17 @@ const Header: React.FC<HeaderProps> = ({ isBrowsePage }) => {
   const handleSignOut = () => {
     auth
       .signOut()
-      .then(() => toast.success("Signed out successfully"))
+      .then(() => {
+        toast.success("Signed out successfully");
+        sessionStorage.clear();
+      })
       .catch((error) => toast.error(error.message));
   };
 
   return (
     <nav
-      className={`absolute px-8 py-5 w-screen ${
-        isBrowsePage ? "flex items-center justify-between" : ""
+      className={`absolute px-5 w-screen ${
+        isBrowsePage && "flex items-center justify-between z-10"
       }`}
     >
       <Link to={isBrowsePage ? "/browse" : "/"}>
