@@ -16,9 +16,11 @@ export default function useFetchMovies() {
     const isPageRefresh = navigationEntries.some(
       (entry) => entry.type === "reload"
     );
-    if (!isPageRefresh) {
-      return;
+    if (isPageRefresh) {
+      sessionStorage.removeItem("recoil-movie-persist");
     }
+
+    if (!isPageRefresh) return;
 
     const fetchMovies = async () => {
       try {
@@ -28,7 +30,7 @@ export default function useFetchMovies() {
         }
 
         console.log("fetching movies");
-        const baseUrl = "https://api.themoviedb.org/3";
+        const baseUrl = "https://api.themoviedb.org/3/";
         const responses = await Promise.all([
           axios.get(`${baseUrl}${requests.fetchTrending}`),
           axios.get(`${baseUrl}${requests.fetchNetflixOriginals}`),
@@ -38,6 +40,9 @@ export default function useFetchMovies() {
           axios.get(`${baseUrl}${requests.fetchHorrorMovies}`),
           axios.get(`${baseUrl}${requests.fetchRomanceMovies}`),
           axios.get(`${baseUrl}${requests.fetchDocumentaries}`),
+          axios.get(`${baseUrl}${requests.fetchTrendingTV}`),
+          axios.get(`${baseUrl}${requests.fetchPopularTV}`),
+          axios.get(`${baseUrl}${requests.fetchTopRatedTV}`),
         ]);
 
         setMoviesState({
@@ -49,6 +54,9 @@ export default function useFetchMovies() {
           horrorMovies: responses[5].data.results,
           romanceMovies: responses[6].data.results,
           documentaries: responses[7].data.results,
+          trendingTV: responses[8].data.results,
+          popularTV: responses[9].data.results,
+          topRatedTV: responses[10].data.results,
         });
       } catch (err) {
         console.log(err);

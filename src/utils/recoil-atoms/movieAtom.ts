@@ -17,6 +17,9 @@ export const movieAtom = atom({
     horrorMovies: [],
     romanceMovies: [],
     documentaries: [],
+    trendingTV: [],
+    topRatedTV: [],
+    popularTV: [],
   },
   effects_UNSTABLE: [persistAtom],
 });

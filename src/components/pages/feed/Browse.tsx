@@ -6,15 +6,14 @@ import Hero from "./Hero";
 import Movies from "./Movies";
 
 const Browse: React.FC = () => {
-
   useFetchMovies();
 
   return (
-    <div className="relative bg-[#221F1F] w-screen h-screen">
+    <div className="relative z-0 bg-black w-screen min-h-screen overflow-hidden py-8">
       <Header isBrowsePage={true} />
       <main>
         <Hero />
-        {/* <Movies /> */}
+        <Movies />
       </main>
     </div>
   );

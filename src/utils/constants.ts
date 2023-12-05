@@ -8,8 +8,7 @@ export const API_OPTIONS = {
   method: "GET",
   headers: {
     accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyYmFkNGE5YTM1Mzk2ZWRlZWM2OTgxN2M5YjhkNzE0MyIsInN1YiI6IjY0ZWFjZDdhNDU4MTk5MDBhZGE5YmNhZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.oEbXZ0y0t7qj1RaWOjmtwzvviNcRqRwtyXFp_zGYqoQ",
+    Authorization: import.meta.env.VITE_TMDB_BEARER,
   },
 };
 
@@ -38,6 +37,15 @@ export const requests = {
   fetchDocumentaries: `/discover/movie?api_key=${
     import.meta.env.VITE_TMDB_API_KEY
   }&with_genres=99&region=IN`,
+  fetchTrendingTV: `/trending/tv/week?api_key=${
+    import.meta.env.VITE_TMDB_API_KEY
+  }&region=IN`,
+  fetchPopularTV: `/tv/popular?api_key=${
+    import.meta.env.VITE_TMDB_API_KEY
+  }&region=IN`,
+  fetchTopRatedTV: `/tv/top_rated?api_key=${
+    import.meta.env.VITE_TMDB_API_KEY
+  }&region=IN`,
 };
 
 export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500";
@@ -50,5 +58,3 @@ export const SUPPORTED_LANGUAGES = [
   { identifier: "hindi", name: "Hindi" },
   { identifier: "spanish", name: "Spanish" },
 ];
-
-// export const OPENAI_KEY = process.env.REACT_APP_OPENAI_KEY;

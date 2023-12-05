@@ -2,11 +2,38 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 
 import { movieAtom } from "../../../utils/recoil-atoms/movieAtom";
+import MovieRow from "./MovieRow";
 
 const Movies: React.FC = () => {
-  const movies = useRecoilValue(movieAtom);
+  const {
+    trending,
+    netflixOriginals,
+    topRated,
+    actionMovies,
+    comedyMovies,
+    horrorMovies,
+    romanceMovies,
+    documentaries,
+    trendingTV,
+    popularTV,
+    topRatedTV,
+  } = useRecoilValue(movieAtom);
 
-  return <div>Movies</div>;
+  return (
+    <section className="mt-[-15px] space-y-8 bg-black z-50 px-5 no-scrollbar">
+      <MovieRow title="" movies={trending} />
+      <MovieRow title="Netflix Originals" movies={netflixOriginals} />
+      <MovieRow title="Top Rated" movies={topRated} />
+      <MovieRow title="Action Movies" movies={actionMovies} />
+      <MovieRow title="Comedy Movies" movies={comedyMovies} />
+      <MovieRow title="Horror Movies" movies={horrorMovies} />
+      <MovieRow title="Romance Movies" movies={romanceMovies} />
+      <MovieRow title="Documentaries" movies={documentaries} />
+      <MovieRow title="Popular TV Shows" movies={trendingTV} />
+      <MovieRow title="Popular TV Shows" movies={topRatedTV} />
+      <MovieRow title="Popular TV Shows" movies={popularTV} />
+    </section>
+  );
 };
 
 export default Movies;
