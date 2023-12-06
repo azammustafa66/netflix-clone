@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import Header from "../layout/Header";
 
 const Search: React.FC = () => {
   return (
-    <div>Search</div>
-  )
-}
+    <div>
+      <Header />
+      Search
+    </div>
+  );
+};
 
 export default Search;

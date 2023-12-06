@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Header from "../../layout/Header";
 import useFetchMovies from "../../../utils/hooks/useFetchMovies";

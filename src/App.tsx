@@ -55,7 +55,7 @@ export default function App(): JSX.Element {
               }
             />
             <Route
-              path="/search:q"
+              path="/search/:q"
               element={
                 <ProtectedRoute>
                   <Search />
