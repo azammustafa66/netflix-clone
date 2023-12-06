@@ -8,6 +8,7 @@ import { PublicRoutes } from "./utils/public-routes/PublicRoutes";
 import AuthListenerComponent from "./components/auth/AuthListenerComponent";
 import Loader from "./components/loader-ui/Loader";
 import NotFoundPage from "./components/pages/NotFoundPage";
+import Search from "./components/pages/Search";
 
 const LogIn = lazy(() => import("./components/pages/LogIn"));
 const Browse = lazy(() => import("./components/pages/feed/Browse"));
@@ -50,6 +51,14 @@ export default function App(): JSX.Element {
               element={
                 <ProtectedRoute>
                   <Browse />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/search:q"
+              element={
+                <ProtectedRoute>
+                  <Search />
                 </ProtectedRoute>
               }
             />

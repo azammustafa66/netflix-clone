@@ -29,7 +29,6 @@ export default function useFetchMovies() {
           return;
         }
 
-        console.log("fetching movies");
         const baseUrl = "https://api.themoviedb.org/3/";
         const responses = await Promise.all([
           axios.get(`${baseUrl}${requests.fetchTrending}`),

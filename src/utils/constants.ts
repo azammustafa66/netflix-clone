@@ -55,6 +55,16 @@ export const BG_URL =
 
 export const SUPPORTED_LANGUAGES = [
   { identifier: "en", name: "English" },
-  { identifier: "hindi", name: "Hindi" },
-  { identifier: "spanish", name: "Spanish" },
+  { identifier: "hi", name: "Hindi" },
+  { identifier: "es", name: "Spanish" },
+  { identifier: "fr", name: "French" },
+  { identifier: "ur", name: "Urdu" },
 ];
+
+export const SEARCH_INPUT_PLACEHOLDERS = {
+  en: "People, Title, Genres...",
+  hi: "लोग, शीर्षक, शैलियाँ...",
+  es: "Personas, Título, Géneros...",
+  fr: "Personnes, Titre, Genres...",
+  ur: "لوگ, عنوان, انواع...",
+};

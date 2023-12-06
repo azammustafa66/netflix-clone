@@ -20,7 +20,7 @@ const Movies: React.FC = () => {
   } = useRecoilValue(movieAtom);
 
   return (
-    <section className="mt-[-15px] space-y-8 bg-black z-50 px-5 no-scrollbar">
+    <section className="mt-[-30px] space-y-8 bg-[#111] z-50 px-5 no-scrollbar">
       <MovieRow title="" movies={trending} />
       <MovieRow title="Netflix Originals" movies={netflixOriginals} />
       <MovieRow title="Top Rated" movies={topRated} />
@@ -29,8 +29,8 @@ const Movies: React.FC = () => {
       <MovieRow title="Horror Movies" movies={horrorMovies} />
       <MovieRow title="Romance Movies" movies={romanceMovies} />
       <MovieRow title="Documentaries" movies={documentaries} />
-      <MovieRow title="Popular TV Shows" movies={trendingTV} />
-      <MovieRow title="Popular TV Shows" movies={topRatedTV} />
+      <MovieRow title="Trending TV Shows" movies={trendingTV} />
+      <MovieRow title="Top Rated TV Shows" movies={topRatedTV} />
       <MovieRow title="Popular TV Shows" movies={popularTV} />
     </section>
   );

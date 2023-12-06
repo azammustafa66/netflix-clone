@@ -18,12 +18,12 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      <section className="relative h-[90vh] flex flex-col items-start justify-center">
+      <section className="relative h-[90vh] flex flex-col items-start justify-center bg-cover bg-center overflow-hidden">
         <div className="relative w-full min-h-screen overflow-hidden aspect-video">
           <iframe
             width="100%"
             height="100%"
-            src={`https://www.youtube.com/embed/${link}?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&mute=1&vq=hd720`}
+            src={`https://www.youtube.com/embed/${link}?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&mute=1&vq=hd720&loop=1`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

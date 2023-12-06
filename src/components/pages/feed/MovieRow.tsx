@@ -1,5 +1,4 @@
 import React from "react";
-import "/src/index.css";
 
 interface Movie {
   id: number;
@@ -19,7 +18,7 @@ const MovieRow: React.FC<RowProps> = ({ title, movies }) => {
       <h2 className="text-4xl font-semibold mb-4 text-gray-100">{title}</h2>
       <div className="flex overflow-x-scroll no-scrollbar cursor-pointer">
         {movies?.map((movie) => (
-          <div key={movie.id} className="relative mr-4 min-w-[100px]">
+          <div key={movie.id} className="relative mr-4 min-w-[110px] ">
             <img
               className="w-44 h-66 object-cover rounded-lg transition-transform duration-200 hover:scale-110 hover:shadow-lg"
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
