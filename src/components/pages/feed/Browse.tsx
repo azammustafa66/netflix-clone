@@ -9,7 +9,7 @@ import { movieAtom } from "../../../utils/recoil-atoms/movieAtom";
 
 const Browse: React.FC = () => {
   const { trending } = useRecoilValue(movieAtom);
-  useFetchMovies();
+  // useFetchMovies();
 
   if (!trending || trending.length <= 0) return <Loader />;
 
