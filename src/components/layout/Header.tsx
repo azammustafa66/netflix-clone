@@ -68,7 +68,7 @@ const Header: React.FC = () => {
       .signOut()
       .then(() => {
         toast.success("Signed out successfully");
-        sessionStorage.clear();
+        sessionStorage.removeItem("recoil-auth-persist");
       })
       .catch((error) => toast.error(error.message));
   };

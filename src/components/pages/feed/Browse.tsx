@@ -5,10 +5,11 @@ import Hero from "./Hero";
 import Movies from "./Movies";
 import Loader from "../../loader-ui/Loader";
 import { movieAtom } from "../../../utils/recoil-atoms/movieAtom";
+import useFetchMovies from "../../../utils/hooks/useFetchMovies";
 
 const Browse: React.FC = () => {
   const { trending } = useRecoilValue(movieAtom);
-  // useFetchMovies();
+  useFetchMovies();
 
   if (!trending || trending.length <= 0) return <Loader />;
 
