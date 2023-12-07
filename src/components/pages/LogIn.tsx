@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import Header from "../layout/Header";
 import { BG_URL, USER_AVATAR } from "../../utils/constants";
 import { auth, db } from "../../utils/firebase";
+import useFetchMovies from "/../../utils/hooks/useFetchMovies";
 
 const loginSchema = yup
   .object({
@@ -67,6 +68,7 @@ const LogIn: React.FC = () => {
         email: user.email,
         photoURL: USER_AVATAR,
       });
+      useFetchMovies();
       // Update user profile
       await updateProfile(user, {
         displayName: formInputs.name,
@@ -92,6 +94,7 @@ const LogIn: React.FC = () => {
         formInputs.password
       );
       toast.success("Signed in successfully!");
+      useFetchMovies();
       navigate("/browse");
     } catch (error) {
       if ((error as FirebaseError).code === "auth/user-not-found") {
