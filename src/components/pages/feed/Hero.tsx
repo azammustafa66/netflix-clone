@@ -9,12 +9,12 @@ import useFetchTrailerLink from "../../../utils/hooks/useFetchTrailer";
 
 const Hero: React.FC = () => {
   useFetchTrailerLink();
-  const { trending } = useRecoilValue(movieAtom);
+  const { topRated } = useRecoilValue(movieAtom);
   const { link, randomIndex } = useRecoilValue(trailersAtom);
 
-  if (!trending || trending.length === 0 || randomIndex === -1) return null;
+  if (!topRated || topRated.length === 0 || randomIndex === -1) return null;
 
-  const { title, name, overview } = trending[randomIndex];
+  const { title, name, overview } = topRated[randomIndex];
 
   return (
     <>

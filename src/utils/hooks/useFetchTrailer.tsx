@@ -7,13 +7,13 @@ import { API_OPTIONS } from "../constants";
 
 export default function useFetchTrailerLink(): void {
   const setTrailerLinkAndIdx = useSetRecoilState(trailersAtom);
-  const { trending } = useRecoilValue(movieAtom);
+  const { topRated } = useRecoilValue(movieAtom);
 
   useEffect(() => {
     const fetchTrailerLink = async () => {
-      if (!trending || trending.length === 0) return;
-      const randomIndex = Math.floor(Math.random() * trending.length);
-      const selectedMovie = trending[randomIndex];
+      if (!topRated || topRated.length === 0) return;
+      const randomIndex = Math.floor(Math.random() * topRated.length);
+      const selectedMovie = topRated[randomIndex];
 
       const { data } = await axios.get(
         `https://api.themoviedb.org/3/movie/${selectedMovie.id}/videos`,
@@ -26,5 +26,5 @@ export default function useFetchTrailerLink(): void {
     };
 
     fetchTrailerLink();
-  }, [trending, setTrailerLinkAndIdx]);
+  }, [topRated, setTrailerLinkAndIdx]);
 }

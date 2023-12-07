@@ -1,18 +1,19 @@
 import React from "react";
 import useFetchMovies from "../../../utils/hooks/useFetchMovies";
+import { useRecoilValue } from "recoil";
+
 import Hero from "./Hero";
 import Movies from "./Movies";
-import { useRecoilValue } from "recoil";
-import { trailersAtom } from "../../../utils/recoil-atoms/trailersAtom";
 import Loader from "../../loader-ui/Loader";
+import { movieAtom } from "../../../utils/recoil-atoms/movieAtom";
 
 const Browse: React.FC = () => {
-  const { link } = useRecoilValue(trailersAtom);
+  const { trending } = useRecoilValue(movieAtom);
   useFetchMovies();
 
-  return link === "" ? (
-    <Loader />
-  ) : (
+  if (!trending || trending.length <= 0) return <Loader />;
+
+  return (
     <div className="relative z-0 bg-black w-full min-h-screen overflow-hidden">
       <Hero />
       <Movies />
