@@ -129,13 +129,13 @@ const LogIn: React.FC = () => {
           backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 100%), url(${BG_URL})`,
         }}
       >
-        <div className="w-full max-w-md p-16 bg-black bg-opacity-80 text-white rounded-md">
+        <div className="w-full max-w-[300px] md:max-w-md p-4 md:p-16 bg-black bg-opacity-80 text-white rounded-md">
           <h2 className="text-3xl font-bold mb-6 text-center">
             {toggleSignIn ? "Log In" : "Sign Up"}
           </h2>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col space-y-4"
+            className="flex flex-col space-y-3 md:space-y-4"
           >
             {!toggleSignIn && (
               <>

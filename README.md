@@ -1,4 +1,3 @@
-
 # Netflix Clone Project
 
 This project is a clone of Netflix, designed to replicate the look and feel of the original Netflix platform. It's built using a modern tech stack and includes several key features similar to Netflix.

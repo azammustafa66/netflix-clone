@@ -20,7 +20,7 @@ const Movies: React.FC = () => {
   } = useRecoilValue(movieAtom);
 
   return (
-    <section className="mt-[-30px] space-y-8 bg-[#111] z-50 px-5 no-scrollbar">
+    <section className="mt-[-30px] pb-5 md:pb-16 space-y-8 bg-[#111] z-50 px-5 no-scrollbar">
       <MovieRow title="" movies={trending} />
       <MovieRow title="Netflix Originals" movies={netflixOriginals} />
       <MovieRow title="Top Rated" movies={topRated} />

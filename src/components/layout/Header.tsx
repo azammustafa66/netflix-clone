@@ -6,6 +6,7 @@ import {
   IoMdArrowDropup,
   IoMdHelpCircleOutline,
 } from "react-icons/io";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
 import { CiUser } from "react-icons/ci";
 
@@ -22,6 +23,7 @@ import { authAtom } from "../../utils/recoil-atoms/authAtom";
 import { configAtom } from "../../utils/recoil-atoms/configAtom";
 import openai from "../../utils/openai";
 import { movieSearchAtom } from "../../utils/recoil-atoms/movieSearchAtom";
+import { useWindowSize } from "../../utils/hooks/useWindowSize";
 
 type Language = "en" | "hi" | "es" | "fr" | "ur";
 
@@ -33,12 +35,16 @@ const Header: React.FC = () => {
   const { language } = useRecoilValue(configAtom);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [showSearchInput, setShowSearchInput] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const moviesFromSearch = useSetRecoilState(movieSearchAtom);
   const navigate = useNavigate();
+  const width = useWindowSize();
 
   const toggleSearchInput = () => {
     setShowSearchInput(!showSearchInput);
   };
+
+  const isMobile = width < 768;
 
   // Handle click outside to close the search input
   useEffect(() => {
@@ -65,6 +71,10 @@ const Header: React.FC = () => {
         sessionStorage.clear();
       })
       .catch((error) => toast.error(error.message));
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   // Handle search when user clicks search button
@@ -124,10 +134,29 @@ const Header: React.FC = () => {
       }`}
     >
       <Link to={isLoggedIn ? "/browse" : "/"}>
-        <img className="w-44" src={LOGO} alt="logo" />
+        <img className="w-28 md:w-44" src={LOGO} alt="logo" />
       </Link>
 
-      {isLoggedIn && (
+      {isMobile && isLoggedIn && (
+        <button
+          onClick={toggleMenu}
+          className="absolute text-white hamburger-icon right-5 top-3"
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      )}
+
+      {isMenuOpen && (
+        <div className="absolute top-0 left-0 w-full h-[200px] bg-black bg-opacity-75">
+          <ul className="text-white p-4">
+            <li onClick={toggleMenu}>Profile</li>
+            <li onClick={toggleMenu}>Settings</li>
+            <li onClick={handleSignOut}>Sign out</li>
+          </ul>
+        </div>
+      )}
+
+      {!isMobile && isLoggedIn && (
         <div className="flex items-center gap-x-8" ref={searchInputDivRef}>
           <select
             name="languages"
@@ -180,6 +209,7 @@ const Header: React.FC = () => {
             className="relative flex items-center"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => setIsHovered(!isHovered)}
           >
             <img
               src={USER_AVATAR}
