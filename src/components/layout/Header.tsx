@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoNotificationsOutline, IoSearchOutline } from "react-icons/io5";
 import {
@@ -10,7 +10,6 @@ import { GrEdit } from "react-icons/gr";
 import { CiUser } from "react-icons/ci";
 
 import {
-  API_OPTIONS,
   LOGO,
   SEARCH_INPUT_PLACEHOLDERS,
   SUPPORTED_LANGUAGES,
@@ -22,25 +21,20 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authAtom } from "../../utils/recoil-atoms/authAtom";
 import { configAtom } from "../../utils/recoil-atoms/configAtom";
 import openai from "../../utils/openai";
-import axios from "axios";
 import { movieSearchAtom } from "../../utils/recoil-atoms/movieSearchAtom";
-
-interface HeaderProps {
-  isBrowsePage?: boolean;
-  isSearch?: boolean;
-}
 
 type Language = "en" | "hi" | "es" | "fr" | "ur";
 
-const Header: React.FC<HeaderProps> = ({ isBrowsePage }) => {
+const Header: React.FC = () => {
   const searchInputDivRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { isLoggedIn } = useRecoilValue(authAtom);
   const setLanguage = useSetRecoilState(configAtom);
   const { language } = useRecoilValue(configAtom);
-  const moviesFromSearch = useSetRecoilState(movieSearchAtom);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [showSearchInput, setShowSearchInput] = useState<boolean>(false);
+  const moviesFromSearch = useSetRecoilState(movieSearchAtom);
+  const navigate = useNavigate();
 
   const toggleSearchInput = () => {
     setShowSearchInput(!showSearchInput);
@@ -73,11 +67,18 @@ const Header: React.FC<HeaderProps> = ({ isBrowsePage }) => {
       .catch((error) => toast.error(error.message));
   };
 
-  const handleSubmit = async () => {
+  // Handle search when user clicks search button
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    navigate(
+      `/search?q=${encodeURIComponent(searchInputRef.current?.value ?? "")}`
+    );
+
     const gptQuery =
       "Act as a Movie Recommendation system and suggest some movies for the query : " +
       searchInputRef.current?.value +
-      ". only give me names of top 10-25 movies, comma seperated like the example result given ahead. Example Result: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
+      ". give me names of my movie prompt and similar movies, comma seperated like the example result given ahead. Example Result: Gadar, Sholay, Don, Golmaal, Koi Mil Gaya";
 
     try {
       const response = await openai.chat.completions.create({
@@ -85,14 +86,16 @@ const Header: React.FC<HeaderProps> = ({ isBrowsePage }) => {
         model: "gpt-3.5-turbo",
       });
 
-      if (response.choices && response.choices.length > 0) {
-        console.log(response.choices[0]?.message?.content);
+      if (
+        response.choices[0]?.message?.content?.includes(
+          "I'm sorry, I don't understand."
+        )
+      ) {
+        toast.error("Your query didn't return any results");
+      } else if (response.choices && response.choices.length > 0) {
         moviesFromSearch(
           response.choices[0]?.message?.content?.split(",") ?? []
         );
-        console.log(moviesFromSearch);
-      } else {
-        toast.error("Something went wrong");
       }
     } catch (error) {
       console.error(error);
@@ -100,25 +103,31 @@ const Header: React.FC<HeaderProps> = ({ isBrowsePage }) => {
     }
   };
 
-  const searchMoviesInTMDB = async (movie: string) => {
-    const { data } = await axios.get(
-      `https://api.themoviedb.org/3/search/movie?query=${movie}&adult=false`,
-      API_OPTIONS
-    );
-    console.log(data.results);
+  // Event Handler for search input change
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.trim();
+
+    if (query.length !== 0) {
+      // Update the URL if the query is not empty
+      const newUrl = `search?q=${encodeURIComponent(query)}`;
+      window.history.pushState({}, "", newUrl);
+    } else {
+      // Navigate to /browse if the query is empty
+      navigate("/browse");
+    }
   };
 
   return (
     <nav
-      className={`absolute px-5 w-screen ${
-        isBrowsePage && "flex items-center justify-between z-10"
+      className={`w-full absolute z-10 ${
+        isLoggedIn && "flex items-center justify-between"
       }`}
     >
       <Link to={isLoggedIn ? "/browse" : "/"}>
         <img className="w-44" src={LOGO} alt="logo" />
       </Link>
 
-      {isBrowsePage && (
+      {isLoggedIn && (
         <div className="flex items-center gap-x-8" ref={searchInputDivRef}>
           <select
             name="languages"
@@ -148,7 +157,7 @@ const Header: React.FC<HeaderProps> = ({ isBrowsePage }) => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSubmit();
+                handleSubmit(e);
               }}
             >
               <input
@@ -156,6 +165,7 @@ const Header: React.FC<HeaderProps> = ({ isBrowsePage }) => {
                 placeholder={SEARCH_INPUT_PLACEHOLDERS[language as Language]}
                 className="relative px-2 bg-black text-white border border-white w-72 py-1"
                 ref={searchInputRef}
+                onChange={handleSearchInputChange}
               />
               <button
                 type="submit"

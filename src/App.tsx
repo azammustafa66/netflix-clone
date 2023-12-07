@@ -9,6 +9,7 @@ import AuthListenerComponent from "./components/auth/AuthListenerComponent";
 import Loader from "./components/loader-ui/Loader";
 import NotFoundPage from "./components/pages/NotFoundPage";
 import Search from "./components/pages/Search";
+import Header from "./components/layout/Header";
 
 const LogIn = lazy(() => import("./components/pages/LogIn"));
 const Browse = lazy(() => import("./components/pages/feed/Browse"));
@@ -28,6 +29,7 @@ export default function App(): JSX.Element {
           }}
         />
         <AuthListenerComponent />
+        <Header />
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route
@@ -55,7 +57,7 @@ export default function App(): JSX.Element {
               }
             />
             <Route
-              path="/search/:q"
+              path="/search"
               element={
                 <ProtectedRoute>
                   <Search />
