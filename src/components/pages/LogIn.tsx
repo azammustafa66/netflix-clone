@@ -122,7 +122,7 @@ const LogIn: React.FC = () => {
 
   return (
     <>
-      <Header isBrowsePage={false} />
+      <Header />
       <article
         className="flex flex-col h-screen justify-center items-center bg-cover bg-center"
         style={{
