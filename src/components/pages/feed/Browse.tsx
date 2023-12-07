@@ -1,5 +1,4 @@
 import React from "react";
-import useFetchMovies from "../../../utils/hooks/useFetchMovies";
 import { useRecoilValue } from "recoil";
 
 import Hero from "./Hero";
