@@ -6,6 +6,7 @@ import Movies from "./Movies";
 import Loader from "../../loader-ui/Loader";
 import { movieAtom } from "../../../utils/recoil-atoms/movieAtom";
 import useFetchMovies from "../../../utils/hooks/useFetchMovies";
+import toast from "react-hot-toast";
 
 const Browse: React.FC = () => {
   const { trending } = useRecoilValue(movieAtom);
@@ -22,3 +23,5 @@ const Browse: React.FC = () => {
 };
 
 export default Browse;
+
+toast("Please refersh page if movies do not load");
